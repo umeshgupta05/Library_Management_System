@@ -183,6 +183,41 @@ CREATE TABLE BorrowedBooks (
 - `Books_seq` - Auto-generates book IDs
 - `BorrowedBooks_seq` - Auto-generates borrow transaction IDs
 
+---
+
+## 🗄️ Database Schema
+
+### Connection Details
+
+```properties
+Driver: oracle.jdbc.driver.OracleDriver
+URL: jdbc:oracle:thin:@localhost:1521:XE
+Username: system
+Password: 767089amma (update as needed)
+Port: 1521
+SID: XE
+```
+
+### Tables
+
+#### Books Table
+
+```sql
+CREATE TABLE Books (
+    book_id NUMBER PRIMARY KEY,          -- Auto-generated via sequence
+    book_name VARCHAR2(200) NOT NULL,    -- Book title
+    author VARCHAR2(100) NOT NULL,       -- Author name
+    isbn VARCHAR2(20) UNIQUE NOT NULL,   -- ISBN number (unique)
+    added_date DATE DEFAULT SYSDATE      -- Date added to library
+>>>>>>> 9563ec3c824cbae64cee5f6732934103e642c067
+);
+```
+
+### Sequences
+
+- `Books_seq` - Auto-generates book IDs
+- `BorrowedBooks_seq` - Auto-generates borrow transaction IDs
+
 ### Business Rules
 
 - ✅ Maximum 4 books per student at a time
