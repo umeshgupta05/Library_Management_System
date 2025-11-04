@@ -136,11 +136,7 @@ Update in these files:
 - `searchBook.jsp` (line 149-151)
 - `viewStudentInfo.jsp` (line 151-153)
 
-```java
-String url = "jdbc:oracle:thin:@localhost:1521:XE";
-String username = "system";           // UPDATE THIS
-String password = "your_password";    // UPDATE THIS
-```
+
 
 #### 3. Start Application
 
