@@ -1,76 +1,148 @@
-# 📚 Library Management System - Complete Documentation
+# 📚 Library Management System
 
-**Project**: Library Management System  
-**Technology**: Java, JSP, Servlets, Oracle Database, Apache Tomcat 9.0.96  
-**Version**: 1.0  
-**Last Updated**: November 4, 2025
+**Technology Stack:** Java, JSP, Servlets, Oracle Database XE, Apache Tomcat 9.0.96  
+**Version:** 2.0  
+**Last Updated:** November 4, 2025
 
 ---
 
 ## 📋 Table of Contents
 
-1. [Project Overview](#project-overview)
-2. [Quick Start Guide](#quick-start-guide)
-3. [Database Schema](#database-schema)
-4. [Project Structure](#project-structure)
-5. [Features & Usage](#features--usage)
-6. [Configuration](#configuration)
-7. [Deployment Guide](#deployment-guide)
-8. [Testing Checklist](#testing-checklist)
+1. [Features](#features)
+2. [Project Statistics](#project-statistics)
+3. [Quick Start](#quick-start)
+4. [Database Configuration](#database-configuration)
+5. [Database Schema](#database-schema)
+6. [Project Structure](#project-structure)
+7. [Security](#security)
+8. [Testing](#testing)
 9. [Troubleshooting](#troubleshooting)
-10. [Interview Preparation](#interview-preparation)
 
 ---
 
-## 🎯 Project Overview
+## ✨ Features
 
-### Technology Stack
-
-- **Frontend**: HTML5, CSS3, JSP
-- **Backend**: Java Servlets, JSP
-- **Database**: Oracle Database XE
-- **Server**: Apache Tomcat 9.0.96
-- **JDBC**: Oracle JDBC Driver
-
-### Key Features
-
-- ✅ User Authentication System (Session-based)
-- 📖 Book Management (Add, Search)
-- 📚 Book Issuing System (Track borrowed books)
-- � Book Return System (Update return timestamp)
-- �👨‍🎓 Student Management (Add, View with borrowed books)
-- 🔍 Advanced Search Functionality
-- 🚫 4-Book Borrowing Limit per Student
-- ⏰ Timestamp Tracking for Book Borrowing & Returns
-
-### Project Statistics
-
-- **Total Files**: 20
-- **JSP Pages**: 10
-- **Servlets**: 3
-- **Database Tables**: 3
-- **Lines of Code**: 5,500+
+- 🔐 **Session-Based Authentication** - Secure login/logout system
+- 📖 **Book Management** - Add and search books
+- 📚 **Book Issuing** - Issue books to students (max 4 per student)
+- 📤 **Book Returns** - Process book returns with timestamp tracking
+- 👨‍🎓 **Student Management** - Register and view student information
+- 📋 **Borrowed Books Tracking** - View all books borrowed by students
+- ⏰ **Complete Audit Trail** - Timestamp tracking for all transactions
+- 🚫 **Business Rules Enforcement** - 4-book limit, duplicate prevention
 
 ---
 
-## 🚀 Quick Start Guide
+## 📊 Project Statistics
+
+- **JSP Pages:** 10 (Login, Index, Welcome, AddBook, SearchBook, IssueBook, ReturnBook, AddStudent, ViewStudentInfo)
+- **Servlets:** 3 (CheckLoginServlet, LogoutServlet)
+- **Database Tables:** 3 (Books, Students, BorrowedBooks)
+- **Configuration Files:** 1 (DatabaseConfig)
+- **Security Level:** ✅ Credentials separated from code
+
+---
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
-1. **Java JDK 8+** - [Download](https://www.oracle.com/java/technologies/downloads/)
-2. **Apache Tomcat 9.0+** - [Download](https://tomcat.apache.org/download-90.cgi)
-3. **Oracle Database XE** - [Download](https://www.oracle.com/database/technologies/xe-downloads.html)
-4. **Oracle JDBC Driver** (ojdbc.jar)
+- Java JDK 8+
+- Apache Tomcat 9.0+
+- Oracle Database XE
+- Oracle JDBC Driver (ojdbc.jar in Tomcat's lib folder)
 
 ### Installation Steps
 
-#### 1. Database Setup
+**1. Setup Database**
+
+Run the SQL script to create all tables:
+
+```bash
+sqlplus system/your_password@localhost:1521/XE @setup_borrowed_books.sql
+```
+
+**2. Configure Database Credentials**
+
+Edit `WEB-INF/classes/config/DatabaseConfig.java`:
+
+```java
+private static final String DB_URL = "jdbc:oracle:thin:@localhost:1521:XE";
+private static final String DB_USERNAME = "system";
+private static final String DB_PASSWORD = "your_password";
+```
+
+Compile the configuration:
+
+```bash
+cd WEB-INF/classes
+javac config/DatabaseConfig.java
+```
+
+**3. Start Application**
+
+```bash
+# Start Oracle Database
+net start OracleServiceXE
+
+# Start Tomcat
+cd apache-tomcat-9.0.96\bin
+startup.bat
+
+# Access: http://localhost:8080/AdJava/
+```
+
+**4. Login**
+
+- Username: `admin`
+- Password: `password123`
+
+---
+
+## 🔐 Database Configuration
+
+### Centralized Credentials
+
+All database credentials are now managed through `DatabaseConfig.java`:
+
+```
+WEB-INF/classes/config/DatabaseConfig.java
+```
+
+**Benefits:**
+
+- ✅ Single point of configuration
+- ✅ No hardcoded credentials in JSP files
+- ✅ Easy to change for different environments
+- ✅ Git-ignored for security
+
+**Usage in JSP:**
+
+```jsp
+<%@ page import="config.DatabaseConfig" %>
+<%
+    Class.forName(DatabaseConfig.getDriver());
+    Connection conn = DriverManager.getConnection(
+        DatabaseConfig.getUrl(),
+        DatabaseConfig.getUsername(),
+        DatabaseConfig.getPassword()
+    );
+%>
+```
+
+---
+
+## 🗄️ Database Schema
+
+---
+
+## 🗄️ Database Schema
+
+### Tables Overview
+
+**1. Books Table**
 
 ```sql
--- Connect to Oracle
-sqlplus system/your_password@localhost:1521/XE
-
--- Create Books table
 CREATE TABLE Books (
     book_id NUMBER PRIMARY KEY,
     book_name VARCHAR2(200) NOT NULL,
@@ -78,8 +150,11 @@ CREATE TABLE Books (
     isbn VARCHAR2(20) UNIQUE NOT NULL,
     added_date DATE DEFAULT SYSDATE
 );
+```
 
--- Create Students table
+**2. Students Table**
+
+```sql
 CREATE TABLE Students (
     student_id NUMBER PRIMARY KEY,
     name VARCHAR2(100) NOT NULL,
@@ -87,228 +162,33 @@ CREATE TABLE Students (
     contact VARCHAR2(20) NOT NULL,
     registered_date DATE DEFAULT SYSDATE
 );
+```
 
--- Create BorrowedBooks table
+**3. BorrowedBooks Table**
+
+```sql
 CREATE TABLE BorrowedBooks (
     borrow_id NUMBER PRIMARY KEY,
     student_id NUMBER NOT NULL,
     book_id NUMBER NOT NULL,
-    borrow_date TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL,
+    borrow_date TIMESTAMP DEFAULT SYSTIMESTAMP,
     return_date TIMESTAMP,
     CONSTRAINT fk_borrowed_student FOREIGN KEY (student_id) REFERENCES Students(student_id),
-    CONSTRAINT fk_borrowed_book FOREIGN KEY (book_id) REFERENCES Books(book_id),
-    CONSTRAINT chk_return_after_borrow CHECK (return_date IS NULL OR return_date > borrow_date)
-);
-
--- Create sequence for Books
-CREATE SEQUENCE Books_seq
-    START WITH 1
-    INCREMENT BY 1
-    NOCACHE
-    NOCYCLE;
-
--- Create sequence for BorrowedBooks
-CREATE SEQUENCE BorrowedBooks_seq
-    START WITH 1
-    INCREMENT BY 1
-    NOCACHE
-    NOCYCLE;
-
--- Create indexes for better performance
-CREATE INDEX idx_borrowed_student ON BorrowedBooks(student_id);
-CREATE INDEX idx_borrowed_book ON BorrowedBooks(book_id);
-
--- Insert sample data
-INSERT INTO Books VALUES (Books_seq.NEXTVAL, 'Java Programming', 'James Gosling', '978-0134685991', SYSDATE);
-INSERT INTO Books VALUES (Books_seq.NEXTVAL, 'Effective Java', 'Joshua Bloch', '978-0134686097', SYSDATE);
-INSERT INTO Students VALUES (1001, 'John Doe', 'john.doe@email.com', '1234567890', SYSDATE);
-INSERT INTO Students VALUES (1002, 'Jane Smith', 'jane.smith@email.com', '0987654321', SYSDATE);
-
-COMMIT;
-```
-
-#### 2. Update Database Credentials
-
-Update in these files:
-
-- `addBook.jsp` (line 67-69)
-- `addStudent.jsp` (line 68-70)
-- `searchBook.jsp` (line 149-151)
-- `viewStudentInfo.jsp` (line 151-153)
-
-```java
-String url = "jdbc:oracle:thin:@localhost:1521:XE";
-String username = "system";           // UPDATE THIS
-String password = "your_password";    // UPDATE THIS
-```
-
-#### 3. Start Application
-
-```cmd
-# Start Oracle Database
-net start OracleServiceXE
-
-# Start Tomcat
-cd c:\Users\HP\Downloads\apache-tomcat-9.0.96-windows-x64\apache-tomcat-9.0.96\bin
-startup.bat
-
-# Access application
-# Browser: http://localhost:8080/AdJava/
-```
-
-#### 4. Login Credentials
-
-- **User ID**: `admin`
-- **Password**: `password123`
-
----
-
-## 🗄️ Database Schema
-
-### Connection Details
-
-```properties
-Driver: oracle.jdbc.driver.OracleDriver
-URL: jdbc:oracle:thin:@localhost:1521:XE
-Username: system
-Password: 767089amma (update as needed)
-Port: 1521
-SID: XE
-```
-
-### Tables
-
-#### Books Table
-
-```sql
-CREATE TABLE Books (
-    book_id NUMBER PRIMARY KEY,          -- Auto-generated via sequence
-    book_name VARCHAR2(200) NOT NULL,    -- Book title
-    author VARCHAR2(100) NOT NULL,       -- Author name
-    isbn VARCHAR2(20) UNIQUE NOT NULL,   -- ISBN number (unique)
-    added_date DATE DEFAULT SYSDATE      -- Date added to library
+    CONSTRAINT fk_borrowed_book FOREIGN KEY (book_id) REFERENCES Books(book_id)
 );
 ```
-
-**Columns:**
-| Column | Type | Constraints | Description |
-|--------|------|-------------|-------------|
-| book_id | NUMBER | PRIMARY KEY | Unique identifier (auto-generated) |
-| book_name | VARCHAR2(200) | NOT NULL | Book title |
-| author | VARCHAR2(100) | NOT NULL | Author name |
-| isbn | VARCHAR2(20) | UNIQUE, NOT NULL | ISBN number |
-| added_date | DATE | DEFAULT SYSDATE | Date added |
-
-#### Students Table
-
-```sql
-CREATE TABLE Students (
-    student_id NUMBER PRIMARY KEY,       -- Manually assigned
-    name VARCHAR2(100) NOT NULL,         -- Student name
-    email VARCHAR2(100) UNIQUE NOT NULL, -- Email (unique)
-    contact VARCHAR2(20) NOT NULL,       -- Phone number
-    registered_date DATE DEFAULT SYSDATE -- Registration date
-);
-```
-
-**Columns:**
-| Column | Type | Constraints | Description |
-|--------|------|-------------|-------------|
-| student_id | NUMBER | PRIMARY KEY | Unique identifier (manual) |
-| name | VARCHAR2(100) | NOT NULL | Student full name |
-| email | VARCHAR2(100) | UNIQUE, NOT NULL | Email address |
-| contact | VARCHAR2(20) | NOT NULL | Contact number |
-| registered_date | DATE | DEFAULT SYSDATE | Registration date |
-
-#### BorrowedBooks Table
-
-```sql
-CREATE TABLE BorrowedBooks (
-    borrow_id NUMBER PRIMARY KEY,                -- Auto-generated via sequence
-    student_id NUMBER NOT NULL,                  -- Reference to Students
-    book_id NUMBER NOT NULL,                     -- Reference to Books
-    borrow_date TIMESTAMP DEFAULT SYSTIMESTAMP, -- When book was borrowed
-    return_date TIMESTAMP,                       -- When book was returned (NULL = not returned)
-    CONSTRAINT fk_borrowed_student FOREIGN KEY (student_id) REFERENCES Students(student_id),
-    CONSTRAINT fk_borrowed_book FOREIGN KEY (book_id) REFERENCES Books(book_id),
-    CONSTRAINT chk_return_after_borrow CHECK (return_date IS NULL OR return_date > borrow_date)
-);
-```
-
-**Columns:**
-| Column | Type | Constraints | Description |
-|--------|------|-------------|-------------|
-| borrow_id | NUMBER | PRIMARY KEY | Unique borrow transaction ID |
-| student_id | NUMBER | NOT NULL, FOREIGN KEY | Student who borrowed |
-| book_id | NUMBER | NOT NULL, FOREIGN KEY | Book that was borrowed |
-| borrow_date | TIMESTAMP | DEFAULT SYSTIMESTAMP | Borrow timestamp |
-| return_date | TIMESTAMP | NULL allowed | Return timestamp (NULL = still borrowed) |
-
-**Business Rules:**
-
-- Each student can borrow maximum 4 books at a time
-- Same book cannot be borrowed twice by same student simultaneously
-- return_date must be after borrow_date (if not NULL)
 
 ### Sequences
 
-```sql
-CREATE SEQUENCE Books_seq
-    START WITH 1
-    INCREMENT BY 1
-    NOCACHE
-    NOCYCLE;
+- `Books_seq` - Auto-generates book IDs
+- `BorrowedBooks_seq` - Auto-generates borrow transaction IDs
 
-CREATE SEQUENCE BorrowedBooks_seq
-    START WITH 1
-    INCREMENT BY 1
-    NOCACHE
-    NOCYCLE;
-```
+### Business Rules
 
-### Sample Queries
-
-**Search Books:**
-
-```sql
-SELECT * FROM Books
-WHERE UPPER(book_name) LIKE '%JAVA%'
-   OR UPPER(author) LIKE '%JAVA%'
-ORDER BY book_name;
-```
-
-**Find Student:**
-
-```sql
-SELECT * FROM Students WHERE student_id = 1001;
-```
-
-**Get Student's Borrowed Books:**
-
-```sql
-SELECT bb.borrow_id, bb.book_id, b.book_name, b.author, bb.borrow_date
-FROM BorrowedBooks bb
-JOIN Books b ON bb.book_id = b.book_id
-WHERE bb.student_id = 1001 AND bb.return_date IS NULL
-ORDER BY bb.borrow_date DESC;
-```
-
-**Count Borrowed Books per Student:**
-
-```sql
-SELECT s.student_id, s.name, COUNT(bb.borrow_id) as books_borrowed
-FROM Students s
-LEFT JOIN BorrowedBooks bb ON s.student_id = bb.student_id AND bb.return_date IS NULL
-GROUP BY s.student_id, s.name
-ORDER BY books_borrowed DESC;
-```
-
-**Count Records:**
-
-```sql
-SELECT COUNT(*) AS total_books FROM Books;
-SELECT COUNT(*) AS total_students FROM Students;
-```
+- ✅ Maximum 4 books per student at a time
+- ✅ Same book cannot be borrowed twice by same student simultaneously
+- ✅ return_date = NULL means book is currently borrowed
+- ✅ All transactions timestamped with SYSTIMESTAMP
 
 ---
 
@@ -316,25 +196,232 @@ SELECT COUNT(*) AS total_students FROM Students;
 
 ```
 AdJava/
-│
-├── 📄 index.jsp                          # Landing page
-├── 📄 Login.jsp                          # Login page
-├── 📄 welcome.jsp                        # Dashboard
-├── 📄 addBook.jsp                        # Add book form
-├── 📄 addStudent.jsp                     # Add student form
-├── 📄 searchBook.jsp                     # Search books
-├── 📄 viewStudentInfo.jsp                # View student info
-├── 📄 RandomNumberGenerator.jsp          # Random number utility
+├── index.jsp                    # Landing page
+├── Login.jsp                    # Login form
+├── welcome.jsp                  # Dashboard (6 features)
+├── addBook.jsp                  # Add new book
+├── searchBook.jsp               # Search books
+├── issueBook.jsp                # Issue book to student
+├── returnBook.jsp               # Return book from student
+├── addStudent.jsp               # Register student
+├── viewStudentInfo.jsp          # View student & borrowed books
+├── setup_borrowed_books.sql     # Database setup script
+├── run_setup.bat                # Batch file to run SQL
+├── .gitignore                   # Excludes DatabaseConfig from git
+├── Readme.md                    # This file
+└── WEB-INF/
+    ├── web.xml                  # Servlet mappings
+    └── classes/
+        ├── CheckLoginServlet.java         # Login handler
+        ├── CheckLoginServlet.class
+        ├── LogoutServlet.java             # Logout handler
+        ├── LogoutServlet.class
+        └── config/
+            ├── DatabaseConfig.java         # DB credentials (git-ignored)
+            ├── DatabaseConfig.class
+            └── DatabaseConfig_TEMPLATE.java # Template for setup
+```
+
+---
+
+## 🔒 Security
+
+### Implemented Security Features
+
+1. **Session-Based Authentication**
+
+   - All pages check for valid session
+   - Redirect to login if unauthorized
+   - Logout invalidates session completely
+
+2. **Centralized Database Configuration**
+
+   - Credentials in separate `DatabaseConfig.java`
+   - No hardcoded passwords in JSP files
+   - Git-ignored to prevent credential exposure
+
+3. **SQL Injection Prevention**
+
+   - All queries use `PreparedStatement`
+   - Parameter binding instead of string concatenation
+   - Input validation and sanitization
+
+4. **Input Validation**
+   - Trim and empty checks on all inputs
+   - NumberFormatException handling
+   - Duplicate entry prevention
+
+### Files Using DatabaseConfig
+
+- ✅ `addBook.jsp`
+- ✅ `addStudent.jsp`
+- ✅ `searchBook.jsp`
+- ✅ `viewStudentInfo.jsp`
+- ✅ `issueBook.jsp`
+- ✅ `returnBook.jsp`
+
+### .gitignore Configuration
+
+```
+WEB-INF/classes/config/DatabaseConfig.class
+WEB-INF/classes/config/DatabaseConfig.java
+*.class
+*.log
+```
+
+---
+
+## 🧪 Testing
+
+### Test Scenarios
+
+**1. Login System**
+
+- Login with correct credentials (admin/password123)
+- Login with incorrect credentials
+- Access protected pages without login
+- Logout and verify session cleared
+
+**2. Book Management**
+
+- Add new book
+- Search by book name
+- Search by author name
+- Add duplicate ISBN (should fail)
+
+**3. Student Management**
+
+- Register new student
+- View student information
+- Register with duplicate ID (should fail)
+- Register with duplicate email (should fail)
+
+**4. Book Borrowing**
+
+- Issue book to student
+- Check book count (X/4)
+- Try issuing 5th book (should fail)
+- View borrowed books in student info
+- Borrow same book twice (should fail)
+
+**5. Book Returns**
+
+- Return a borrowed book
+- Verify book count decreases
+- Try returning non-borrowed book (should fail)
+- Verify timestamp recorded
+
+---
+
+## ❗ Troubleshooting
+
+---
+
+## ❗ Troubleshooting
+
+### Common Issues
+
+**1. ClassNotFoundException: config.DatabaseConfig**
+
+```
+Solution: Compile DatabaseConfig.java
+cd WEB-INF/classes
+javac config/DatabaseConfig.java
+```
+
+**2. ORA-01017: Invalid username/password**
+
+```
+Solution: Update credentials in DatabaseConfig.java
+Check: sqlplus system/password@localhost:1521/XE
+```
+
+**3. HTTP 404 - Page Not Found**
+
+```
+Solution: Verify Tomcat is running and URL is correct
+URL: http://localhost:8080/AdJava/
+```
+
+**4. Session Lost / Not Logged In**
+
+```
+Solution: Check session timeout in web.xml
+Clear browser cookies and login again
+```
+
+**5. Book Not Issuing (4-Book Limit)**
+
+```
+Solution: Student has 4 books already borrowed
+Return books first, then issue new ones
+```
+
+**6. Oracle Database Not Running**
+
+```
+Solution: net start OracleServiceXE
+Check: lsnrctl status
+```
+
+---
+
+## 📝 Key Interview Points
+
+### Architecture
+
+- **MVC Pattern**: JSP (View), Servlets (Controller), Database (Model)
+- **Session Management**: HttpSession for authentication state
+- **Centralized Configuration**: DatabaseConfig class for credentials
+
+### Security
+
+- **SQL Injection Prevention**: PreparedStatement with parameter binding
+- **Session Security**: All pages check authentication before display
+- **Credential Management**: Separated from code, git-ignored
+
+### Database
+
+- **Referential Integrity**: Foreign keys ensure data consistency
+- **Sequences**: Auto-increment primary keys
+- **Timestamps**: SYSTIMESTAMP for precise tracking
+- **Constraints**: Check constraints for business rules
+
+### Business Logic
+
+- **4-Book Limit**: COUNT query with WHERE return_date IS NULL
+- **Duplicate Prevention**: UNIQUE constraints and validation
+- **Audit Trail**: Never delete, update return_date instead
+
+### Technologies
+
+- **Frontend**: JSP, HTML5, CSS3 (responsive gradient design)
+- **Backend**: Java Servlets, JDBC
+- **Database**: Oracle 11g XE
+- **Server**: Apache Tomcat 9.0.96
+
+---
+
+**Project Status:** ✅ Production Ready  
+**Security Level:** ✅ Credentials Secured  
+**Last Updated:** November 4, 2025
+├── 📄 welcome.jsp # Dashboard
+├── 📄 addBook.jsp # Add book form
+├── 📄 addStudent.jsp # Add student form
+├── 📄 searchBook.jsp # Search books
+├── 📄 viewStudentInfo.jsp # View student info
+├── 📄 RandomNumberGenerator.jsp # Random number utility
 │
 ├── 📁 WEB-INF/
-│   ├── 📄 web.xml                        # Deployment descriptor
-│   └── 📁 classes/
-│       ├── 📄 CheckLoginServlet.java     # Login servlet
-│       └── 📄 SessionCookieServlet.java  # Session demo servlet
+│ ├── 📄 web.xml # Deployment descriptor
+│ └── 📁 classes/
+│ ├── 📄 CheckLoginServlet.java # Login servlet
+│ └── 📄 SessionCookieServlet.java # Session demo servlet
 │
-├── 📘 DOCUMENTATION.md                   # This file
-└── 📄 AdJava.iml                         # IntelliJ project file
-```
+├── 📘 DOCUMENTATION.md # This file
+└── 📄 AdJava.iml # IntelliJ project file
+
+````
 
 ### File Descriptions
 
@@ -455,7 +542,7 @@ AdJava/
         <url-pattern>/SessionCookieServlet</url-pattern>
     </servlet-mapping>
 </web-app>
-```
+````
 
 ### JDBC Configuration (in JSP files)
 

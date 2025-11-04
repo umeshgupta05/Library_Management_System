@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
+<%@ page import="config.DatabaseConfig" %>
 <%
     // Check if user is logged in
     HttpSession userSession = request.getSession(false);
@@ -286,13 +287,12 @@
 
     if (studentId != null && !studentId.trim().isEmpty()) {
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-
-            String url = "jdbc:oracle:thin:@localhost:1521:XE";
-            String username = "system";
-            String password = "767089amma";
-
-            conn = DriverManager.getConnection(url, username, password);
+            Class.forName(DatabaseConfig.getDriver());
+            conn = DriverManager.getConnection(
+                DatabaseConfig.getUrl(), 
+                DatabaseConfig.getUsername(), 
+                DatabaseConfig.getPassword()
+            );
 
             String sql = "SELECT * FROM Students WHERE student_id = ?";
             pstmt = conn.prepareStatement(sql);

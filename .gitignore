@@ -1,0 +1,26 @@
+# Database Configuration - DO NOT COMMIT
+WEB-INF/classes/config/DatabaseConfig.class
+WEB-INF/classes/config/DatabaseConfig.java
+
+# Compiled class files
+*.class
+
+# Log files
+*.log
+
+# IDE specific files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Tomcat work directory
+work/
+temp/
+logs/

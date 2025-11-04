@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.sql.*" %>
+<%@ page import="config.DatabaseConfig" %>
 <%
     // Check if user is logged in
     HttpSession userSession = request.getSession(false);
@@ -213,12 +214,12 @@
     
     if (searchQuery != null && !searchQuery.trim().isEmpty()) {
         try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            String url = "jdbc:oracle:thin:@localhost:1521:XE";
-            String username = "system";
-            String password = "767089";
-            
-            conn = DriverManager.getConnection(url, username, password);
+            Class.forName(DatabaseConfig.getDriver());
+            conn = DriverManager.getConnection(
+                DatabaseConfig.getUrl(), 
+                DatabaseConfig.getUsername(), 
+                DatabaseConfig.getPassword()
+            );
             
             String sql = "SELECT * FROM Books WHERE UPPER(book_name) LIKE ? OR UPPER(author) LIKE ? ORDER BY book_name";
             pstmt = conn.prepareStatement(sql);
