@@ -72,8 +72,7 @@ Library_Management_System/
 ├── pom.xml
 └── README.md
 
-yaml
-Copy code
+
 
 ---
 
@@ -91,26 +90,22 @@ git clone https://github.com/umeshgupta05/Library_Management_System.git
 cd Library_Management_System
 mvn clean install
 mvn spring-boot:run
-Access Application
-arduino
-Copy code
+
 http://localhost:8080
 Default Credentials
 makefile
-Copy code
+
 Username: admin
 Password: password123
 🗄️ Database Configuration
 H2 Database (Default)
 H2 Console:
 
-bash
-Copy code
+
 http://localhost:8080/h2-console
 Default credentials:
 
-yaml
-Copy code
+
 JDBC URL: jdbc:h2:mem:librarydb
 Username: sa
 Password:
@@ -118,16 +113,16 @@ Oracle XE (Production)
 Edit application.properties:
 
 properties
-Copy code
+
 spring.datasource.url=jdbc:oracle:thin:@localhost:1521:XE
 spring.datasource.username=system
 spring.datasource.password=your_password
 spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
 spring.jpa.database-platform=org.hibernate.dialect.OracleDialect
+
 🗄️ Database Schema
 1. Books Table
-sql
-Copy code
+
 CREATE TABLE Books (
   book_id NUMBER PRIMARY KEY,
   book_name VARCHAR2(200) NOT NULL,
@@ -135,9 +130,9 @@ CREATE TABLE Books (
   isbn VARCHAR2(20) UNIQUE NOT NULL,
   added_date DATE DEFAULT SYSDATE
 );
+
 2. Students Table
-sql
-Copy code
+
 CREATE TABLE Students (
   student_id NUMBER PRIMARY KEY,
   name VARCHAR2(100) NOT NULL,
@@ -145,9 +140,9 @@ CREATE TABLE Students (
   contact VARCHAR2(20) NOT NULL,
   registered_date DATE DEFAULT SYSDATE
 );
+
 3. BorrowedBooks Table
-sql
-Copy code
+
 CREATE TABLE BorrowedBooks (
   borrow_id NUMBER PRIMARY KEY,
   student_id NUMBER NOT NULL,
@@ -157,11 +152,13 @@ CREATE TABLE BorrowedBooks (
   CONSTRAINT fk_borrowed_student FOREIGN KEY (student_id) REFERENCES Students(student_id),
   CONSTRAINT fk_borrowed_book FOREIGN KEY (book_id) REFERENCES Books(book_id)
 );
+
 Sequences
-sql
-Copy code
+
+
 CREATE SEQUENCE Books_seq START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE BorrowedBooks_seq START WITH 1 INCREMENT BY 1;
+
 🧭 API Endpoints
 Public
 Method	Endpoint	Description
@@ -181,8 +178,7 @@ GET	/issues/all	List all issues
 
 ⚙️ Configuration
 application.properties
-properties
-Copy code
+
 server.port=8080
 spring.mvc.view.prefix=/WEB-INF/views/
 spring.mvc.view.suffix=.jsp
