@@ -1,26 +1,85 @@
-# Database Configuration - DO NOT COMMIT
-WEB-INF/classes/config/DatabaseConfig.class
-WEB-INF/classes/config/DatabaseConfig.java
+# Spring Boot Library Management System
 
-# Compiled class files
-*.class
+### Maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/wrapper/maven-wrapper.jar
+.mvn/timing.properties
 
-# Log files
-*.log
+### Spring Boot ###
+HELP.md
+.gradle
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
-# IDE specific files
+### IDE - IntelliJ IDEA ###
 .idea/
+*.iws
 *.iml
-.vscode/
-.settings/
-.project
+*.ipr
+out/
+
+### IDE - Eclipse ###
 .classpath
+.factorypath
+.project
+.settings/
+.springBeans
+.sts4-cache
+bin/
 
-# OS specific files
+### IDE - VS Code ###
+.vscode/
+
+### IDE - NetBeans ###
+nbproject/
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+
+### OS ###
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+Desktop.ini
 
-# Tomcat work directory
-work/
-temp/
+### Logs ###
+*.log
 logs/
+*.log.*
+
+### Database ###
+*.db
+*.sqlite
+*.h2.db
+
+### Temporary files ###
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+### Build files ###
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+
+### Application specific ###
+application-local.properties
+application-dev.properties

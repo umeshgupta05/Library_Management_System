@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,10 +49,10 @@
             margin-bottom: 30px;
         }
         
-        .login-header h2 {
+        .login-header h1 {
             color: #333;
             font-size: 28px;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
         
         .login-header p {
@@ -68,22 +69,30 @@
             color: #555;
             font-weight: 600;
             margin-bottom: 8px;
-            font-size: 14px;
         }
         
         .form-group input {
             width: 100%;
-            padding: 12px 15px;
+            padding: 12px;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 14px;
-            transition: all 0.3s ease;
+            transition: border-color 0.3s ease;
         }
         
         .form-group input:focus {
             outline: none;
             border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #f5c6cb;
+            text-align: center;
         }
         
         .btn-login {
@@ -96,83 +105,75 @@
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            margin-top: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
         
         .btn-login:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
         }
         
-        .btn-login:active {
-            transform: translateY(0);
-        }
-        
-        .error-message {
-            background-color: #fee;
-            color: #c33;
-            padding: 12px;
-            border-radius: 8px;
-            margin-top: 20px;
+        .back-link {
             text-align: center;
-            font-size: 14px;
-            border-left: 4px solid #c33;
-        }
-        
-        .info-box {
-            background-color: #e3f2fd;
-            padding: 15px;
-            border-radius: 8px;
             margin-top: 20px;
-            border-left: 4px solid #2196F3;
         }
         
-        .info-box p {
-            color: #1976D2;
+        .back-link a {
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+        
+        .back-link a:hover {
+            color: #764ba2;
+            text-decoration: underline;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border: 1px solid #b3d9ff;
+            border-radius: 5px;
+            padding: 12px;
+            margin-bottom: 20px;
             font-size: 13px;
-            margin: 5px 0;
-        }
-        
-        .info-box strong {
-            color: #0d47a1;
+            color: #004085;
         }
     </style>
 </head>
 <body>
     <div class="login-container">
         <div class="login-header">
-            <h2>📚 Library Management</h2>
-            <p>Please login to continue</p>
+            <h1>🔐 Login</h1>
+            <p>Library Management System</p>
         </div>
-        
-        <form action="CheckLoginServlet" method="post">
+
+        <c:if test="${not empty errorMessage}">
+            <div class="error-message">${errorMessage}</div>
+        </c:if>
+
+        <div class="info-box">
+            <strong>Default Credentials:</strong><br>
+            Username: <code>admin</code><br>
+            Password: <code>password123</code>
+        </div>
+
+        <form action="/login" method="post">
             <div class="form-group">
-                <label for="userId">User ID</label>
-                <input type="text" id="userId" name="userId" placeholder="Enter your user ID" required autofocus>
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required placeholder="Enter your username">
             </div>
             
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                <input type="password" id="password" name="password" required placeholder="Enter your password">
             </div>
             
             <button type="submit" class="btn-login">Login</button>
         </form>
         
-        <% 
-            String errorMessage = (String) request.getAttribute("errorMessage");
-            if (errorMessage != null) { 
-        %>
-            <div class="error-message">
-                ⚠️ <%= errorMessage %>
-            </div>
-        <% } %>
-        
-        <div class="info-box">
-            <p><strong>Demo Credentials:</strong></p>
-            <p>User ID: <strong>admin</strong></p>
-            <p>Password: <strong>password123</strong></p>
+        <div class="back-link">
+            <a href="/">← Back to Home</a>
         </div>
     </div>
 </body>

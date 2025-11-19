@@ -1,330 +1,649 @@
-# 📚 Library Management System
+# 📚 Library Management System# 📚 Library Management System
 
-**Technology Stack:** Java, JSP, Servlets, Oracle Database XE, Apache Tomcat 9.0.96  
-**Version:** 2.0  
-**Last Updated:** November 4, 2025
+> A modern, secure Library Management System built with Spring Boot, JSP, and Spring Data JPA**Technology Stack:** Java, JSP, Servlets, Oracle Database XE, Apache Tomcat 9.0.96
 
----
+**Version:** 2.0
 
-## 📋 Table of Contents
+[![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://www.oracle.com/java/)**Last Updated:** November 4, 2025
 
-1. [Features](#features)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.0-brightgreen.svg)](https://spring.io/projects/spring-boot)
+
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)---
+
+---## 📋 Table of Contents
+
+## 🌟 Features1. [Features](#features)
+
 2. [Project Statistics](#project-statistics)
-3. [Quick Start](#quick-start)
-4. [Database Configuration](#database-configuration)
-5. [Database Schema](#database-schema)
-6. [Project Structure](#project-structure)
-7. [Security](#security)
-8. [Testing](#testing)
-9. [Troubleshooting](#troubleshooting)
+
+✨ **Core Features**3. [Quick Start](#quick-start)
+
+- 🔐 Secure authentication with Spring Security4. [Database Configuration](#database-configuration)
+
+- 📖 Complete book management (Add, Search, Update, Delete)5. [Database Schema](#database-schema)
+
+- 👨‍🎓 Student registration and management6. [Project Structure](#project-structure)
+
+- 📋 Book issue and return tracking7. [Security](#security)
+
+- 💰 Automatic fine calculation (₹5/day for overdue)8. [Testing](#testing)
+
+- 🔍 Advanced search (by title, author, ISBN, category)9. [Troubleshooting](#troubleshooting)
+
+- 📊 Admin dashboard with statistics
 
 ---
 
-## ✨ Features
+🛠️ **Technical Features**
 
-- 🔐 **Session-Based Authentication** - Secure login/logout system
-- 📖 **Book Management** - Add and search books
-- 📚 **Book Issuing** - Issue books to students (max 4 per student)
-- 📤 **Book Returns** - Process book returns with timestamp tracking
+- 💾 H2 in-memory database (no setup required!)## ✨ Features
+
+- 🔄 Oracle database support for production
+
+- 🎨 Responsive JSP-based UI- 🔐 **Session-Based Authentication** - Secure login/logout system
+
+- 🔒 BCrypt password encryption- 📖 **Book Management** - Add and search books
+
+- ⚡ Spring Data JPA for data access- 📚 **Book Issuing** - Issue books to students (max 4 per student)
+
+- 🧪 Built-in testing support- 📤 **Book Returns** - Process book returns with timestamp tracking
+
 - 👨‍🎓 **Student Management** - Register and view student information
-- 📋 **Borrowed Books Tracking** - View all books borrowed by students
+
+---- 📋 **Borrowed Books Tracking** - View all books borrowed by students
+
 - ⏰ **Complete Audit Trail** - Timestamp tracking for all transactions
-- 🚫 **Business Rules Enforcement** - 4-book limit, duplicate prevention
 
----
+## 🚀 Quick Start- 🚫 **Business Rules Enforcement** - 4-book limit, duplicate prevention
 
-## 📊 Project Statistics
+### Prerequisites---
 
-- **JSP Pages:** 10 (Login, Index, Welcome, AddBook, SearchBook, IssueBook, ReturnBook, AddStudent, ViewStudentInfo)
+- Java 17 or higher
+
+- Maven 3.6+## 📊 Project Statistics
+
+### Installation- **JSP Pages:** 10 (Login, Index, Welcome, AddBook, SearchBook, IssueBook, ReturnBook, AddStudent, ViewStudentInfo)
+
 - **Servlets:** 3 (CheckLoginServlet, LogoutServlet)
-- **Database Tables:** 3 (Books, Students, BorrowedBooks)
-- **Configuration Files:** 1 (DatabaseConfig)
-- **Security Level:** ✅ Credentials separated from code
 
----
+1. **Clone the repository**- **Database Tables:** 3 (Books, Students, BorrowedBooks)
 
-## 🚀 Quick Start
+   ````bash- **Configuration Files:** 1 (DatabaseConfig)
 
-### Prerequisites
+   git clone https://github.com/umeshgupta05/Library_Management_System.git- **Security Level:** ✅ Credentials separated from code
+
+   cd Library_Management_System
+
+   ```---
+
+   ````
+
+2. **Build the project**## 🚀 Quick Start
+
+   ```bash
+
+   mvn clean install### Prerequisites
+
+   ```
 
 - Java JDK 8+
-- Apache Tomcat 9.0+
-- Oracle Database XE
-- Oracle JDBC Driver (ojdbc.jar in Tomcat's lib folder)
 
-### Installation Steps
+3. **Run the application**- Apache Tomcat 9.0+
+
+   ```bash- Oracle Database XE
+
+   mvn spring-boot:run- Oracle JDBC Driver (ojdbc.jar in Tomcat's lib folder)
+
+   ```
+
+   ### Installation Steps
+
+   Or simply double-click `run.bat` (Windows)
 
 **1. Setup Database**
 
-Run the SQL script to create all tables:
+4. **Access the application**
 
-```bash
+   ```````Run the SQL script to create all tables:
+
+   http://localhost:8080
+
+   ``````bash
+   ```````
+
 sqlplus system/your_password@localhost:1521/XE @setup_borrowed_books.sql
-```
 
-**2. Configure Database Credentials**
+### Default Credentials```
 
-Edit `WEB-INF/classes/config/DatabaseConfig.java`:
+````
 
-```java
+Username: admin**2. Configure Database Credentials**
+
+Password: password123
+
+```Edit `WEB-INF/classes/config/DatabaseConfig.java`:
+
+
+
+---```java
+
 private static final String DB_URL = "jdbc:oracle:thin:@localhost:1521:XE";
-private static final String DB_USERNAME = "system";
+
+## 🛠️ Technology Stackprivate static final String DB_USERNAME = "system";
+
 private static final String DB_PASSWORD = "your_password";
-```
 
-Compile the configuration:
+| Technology | Version | Purpose |```
 
-```bash
-cd WEB-INF/classes
-javac config/DatabaseConfig.java
-```
+|------------|---------|---------|
 
-**3. Start Application**
+| Java | 17 | Programming Language |Compile the configuration:
 
-```bash
+| Spring Boot | 3.2.0 | Application Framework |
+
+| Spring Security | 6.x | Authentication & Authorization |```bash
+
+| Spring Data JPA | 3.x | Data Access Layer |cd WEB-INF/classes
+
+| Hibernate | 6.x | ORM Framework |javac config/DatabaseConfig.java
+
+| JSP + JSTL | 2.3 / 2.0 | View Layer |```
+
+| H2 Database | Latest | Development Database |
+
+| Oracle JDBC | Latest | Production Database |**3. Start Application**
+
+| Maven | 3.6+ | Build Tool |
+
+| Lombok | Latest | Boilerplate Reduction |```bash
+
 # Start Oracle Database
-net start OracleServiceXE
 
-# Start Tomcat
+---net start OracleServiceXE
+
+
+
+## 📁 Project Structure# Start Tomcat
+
 cd apache-tomcat-9.0.96\bin
-startup.bat
 
-# Access: http://localhost:8080/AdJava/
-```
+```startup.bat
 
-**4. Login**
+Library_Management_System/
 
-- Username: `admin`
-- Password: `password123`
+├── src/# Access: http://localhost:8080/AdJava/
 
----
+│   ├── main/```
 
-## 🔐 Database Configuration
+│   │   ├── java/com/library/
 
-### Centralized Credentials
+│   │   │   ├── LibraryManagementSystemApplication.java**4. Login**
 
-All database credentials are now managed through `DatabaseConfig.java`:
+│   │   │   ├── config/
 
-```
-WEB-INF/classes/config/DatabaseConfig.java
-```
+│   │   │   │   └── SecurityConfig.java- Username: `admin`
 
-**Benefits:**
+│   │   │   ├── controller/- Password: `password123`
 
-- ✅ Single point of configuration
+│   │   │   ├── model/
+
+│   │   │   ├── repository/---
+
+│   │   │   ├── service/
+
+│   │   │   └── init/## 🔐 Database Configuration
+
+│   │   ├── resources/
+
+│   │   │   └── application.properties### Centralized Credentials
+
+│   │   └── webapp/WEB-INF/views/
+
+│   │       └── *.jspAll database credentials are now managed through `DatabaseConfig.java`:
+
+│   └── test/
+
+├── pom.xml```
+
+├── .gitignoreWEB-INF/classes/config/DatabaseConfig.java
+
+├── run.bat```
+
+└── README.md
+
+```**Benefits:**
+
+
+
+---- ✅ Single point of configuration
+
 - ✅ No hardcoded credentials in JSP files
-- ✅ Easy to change for different environments
+
+## 🗄️ Database Configuration- ✅ Easy to change for different environments
+
 - ✅ Git-ignored for security
+
+### H2 Database (Default - Development)
 
 **Usage in JSP:**
 
+The application uses H2 in-memory database by default.
+
 ```jsp
-<%@ page import="config.DatabaseConfig" %>
-<%
-    Class.forName(DatabaseConfig.getDriver());
-    Connection conn = DriverManager.getConnection(
-        DatabaseConfig.getUrl(),
+
+**Access H2 Console:**<%@ page import="config.DatabaseConfig" %>
+
+- URL: `http://localhost:8080/h2-console`<%
+
+- JDBC URL: `jdbc:h2:mem:librarydb`    Class.forName(DatabaseConfig.getDriver());
+
+- Username: `sa`    Connection conn = DriverManager.getConnection(
+
+- Password: (leave blank)        DatabaseConfig.getUrl(),
+
         DatabaseConfig.getUsername(),
-        DatabaseConfig.getPassword()
+
+### Oracle Database (Production)        DatabaseConfig.getPassword()
+
     );
-%>
+
+To switch to Oracle, edit `src/main/resources/application.properties`:%>
+
+````
+
+```properties
+
+# Comment out H2 configuration---
+
+# Uncomment and configure Oracle:
+
+spring.datasource.url=jdbc:oracle:thin:@localhost:1521:XE## 🗄️ Database Schema
+
+spring.datasource.username=your_username
+
+spring.datasource.password=your_password---
+
+spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
+
+spring.jpa.database-platform=org.hibernate.dialect.OracleDialect## 🗄️ Database Schema
+
 ```
-
----
-
-## 🗄️ Database Schema
-
----
-
-## 🗄️ Database Schema
 
 ### Tables Overview
 
+---
+
 **1. Books Table**
 
+## 📚 Usage Guide
+
 ```sql
-CREATE TABLE Books (
-    book_id NUMBER PRIMARY KEY,
+
+### 1. LoginCREATE TABLE Books (
+
+Navigate to http://localhost:8080 and login with default credentials    book_id NUMBER PRIMARY KEY,
+
     book_name VARCHAR2(200) NOT NULL,
-    author VARCHAR2(100) NOT NULL,
-    isbn VARCHAR2(20) UNIQUE NOT NULL,
-    added_date DATE DEFAULT SYSDATE
-);
+
+### 2. Manage Books    author VARCHAR2(100) NOT NULL,
+
+- **Add Book**: Fill in book details and submit    isbn VARCHAR2(20) UNIQUE NOT NULL,
+
+- **Search Books**: Search by title, author, ISBN, or category    added_date DATE DEFAULT SYSDATE
+
+- **View All Books**: See complete book inventory);
+
 ```
 
-**2. Students Table**
+### 3. Manage Students
 
-```sql
-CREATE TABLE Students (
-    student_id NUMBER PRIMARY KEY,
-    name VARCHAR2(100) NOT NULL,
-    email VARCHAR2(100) UNIQUE NOT NULL,
+- **Register Student**: Add new student with details**2. Students Table**
+
+- **View Student Info**: Search by roll number to see borrowing history
+
+````sql
+
+### 4. Issue/Return BooksCREATE TABLE Students (
+
+- **Issue Book**: Select book and enter student roll number    student_id NUMBER PRIMARY KEY,
+
+- **Return Book**: Select from active issues and process return    name VARCHAR2(100) NOT NULL,
+
+- **Fine Calculation**: System automatically calculates fines for overdue books    email VARCHAR2(100) UNIQUE NOT NULL,
+
     contact VARCHAR2(20) NOT NULL,
-    registered_date DATE DEFAULT SYSDATE
+
+---    registered_date DATE DEFAULT SYSDATE
+
 );
-```
 
-**3. BorrowedBooks Table**
+## 🌐 API Endpoints```
 
-```sql
-CREATE TABLE BorrowedBooks (
+
+
+### Public**3. BorrowedBooks Table**
+
+- `GET /` - Home page
+
+- `GET /login` - Login page```sql
+
+- `POST /login` - AuthenticationCREATE TABLE BorrowedBooks (
+
     borrow_id NUMBER PRIMARY KEY,
-    student_id NUMBER NOT NULL,
-    book_id NUMBER NOT NULL,
-    borrow_date TIMESTAMP DEFAULT SYSTIMESTAMP,
-    return_date TIMESTAMP,
-    CONSTRAINT fk_borrowed_student FOREIGN KEY (student_id) REFERENCES Students(student_id),
-    CONSTRAINT fk_borrowed_book FOREIGN KEY (book_id) REFERENCES Books(book_id)
-);
-```
 
-### Sequences
+### Protected (Requires Login)    student_id NUMBER NOT NULL,
 
-- `Books_seq` - Auto-generates book IDs
+- `GET /welcome` - Dashboard    book_id NUMBER NOT NULL,
+
+- `GET /books/add` - Add book form    borrow_date TIMESTAMP DEFAULT SYSTIMESTAMP,
+
+- `GET /students/add` - Add student form    return_date TIMESTAMP,
+
+- `GET /issues/issue` - Issue book form    CONSTRAINT fk_borrowed_student FOREIGN KEY (student_id) REFERENCES Students(student_id),
+
+- `GET /issues/return` - Return book form    CONSTRAINT fk_borrowed_book FOREIGN KEY (book_id) REFERENCES Books(book_id)
+
+- `GET /books/search` - Search books);
+
+- `GET /students/view` - View student info```
+
+- `GET /books/all` - All books list
+
+- `GET /issues/all` - All issues list### Sequences
+
+
+
+---- `Books_seq` - Auto-generates book IDs
+
 - `BorrowedBooks_seq` - Auto-generates borrow transaction IDs
 
+## ⚙️ Configuration
+
 ---
+
+All settings are in `src/main/resources/application.properties`:
 
 ## 🗄️ Database Schema
 
-### Connection Details
+```properties
+
+# Server### Connection Details
+
+server.port=8080
 
 ```properties
-Driver: oracle.jdbc.driver.OracleDriver
-URL: jdbc:oracle:thin:@localhost:1521:XE
-Username: system
+
+# JSPDriver: oracle.jdbc.driver.OracleDriver
+
+spring.mvc.view.prefix=/WEB-INF/views/URL: jdbc:oracle:thin:@localhost:1521:XE
+
+spring.mvc.view.suffix=.jspUsername: system
+
 Password: 767089amma (update as needed)
-Port: 1521
-SID: XE
-```
 
-### Tables
+# Database (H2)Port: 1521
 
-#### Books Table
+spring.datasource.url=jdbc:h2:mem:librarydbSID: XE
 
-```sql
-CREATE TABLE Books (
-    book_id NUMBER PRIMARY KEY,          -- Auto-generated via sequence
+spring.h2.console.enabled=true```
+
+
+
+# JPA### Tables
+
+spring.jpa.hibernate.ddl-auto=update
+
+spring.jpa.show-sql=true#### Books Table
+
+
+
+# Session```sql
+
+server.servlet.session.timeout=30mCREATE TABLE Books (
+
+```    book_id NUMBER PRIMARY KEY,          -- Auto-generated via sequence
+
     book_name VARCHAR2(200) NOT NULL,    -- Book title
-    author VARCHAR2(100) NOT NULL,       -- Author name
+
+---    author VARCHAR2(100) NOT NULL,       -- Author name
+
     isbn VARCHAR2(20) UNIQUE NOT NULL,   -- ISBN number (unique)
-    added_date DATE DEFAULT SYSDATE      -- Date added to library
+
+## 📦 Building for Production    added_date DATE DEFAULT SYSDATE      -- Date added to library
+
 >>>>>>> 9563ec3c824cbae64cee5f6732934103e642c067
-);
-```
+
+```bash);
+
+# Create JAR file```
+
+mvn clean package
 
 ### Sequences
 
-- `Books_seq` - Auto-generates book IDs
-- `BorrowedBooks_seq` - Auto-generates borrow transaction IDs
+# Run the JAR
 
-### Business Rules
+java -jar target/library-management-system-1.0.0.jar- `Books_seq` - Auto-generates book IDs
 
-- ✅ Maximum 4 books per student at a time
+```- `BorrowedBooks_seq` - Auto-generates borrow transaction IDs
+
+
+
+---### Business Rules
+
+
+
+## 🧪 Testing- ✅ Maximum 4 books per student at a time
+
 - ✅ Same book cannot be borrowed twice by same student simultaneously
-- ✅ return_date = NULL means book is currently borrowed
-- ✅ All transactions timestamped with SYSTIMESTAMP
+
+```bash- ✅ return_date = NULL means book is currently borrowed
+
+# Run tests- ✅ All transactions timestamped with SYSTIMESTAMP
+
+mvn test
 
 ---
 
-## 📁 Project Structure
+# Run with coverage
 
-```
-AdJava/
+mvn verify## 📁 Project Structure
+
+````
+
+````
+
+---AdJava/
+
 ├── index.jsp                    # Landing page
-├── Login.jsp                    # Login form
+
+## 🐛 Troubleshooting├── Login.jsp                    # Login form
+
 ├── welcome.jsp                  # Dashboard (6 features)
-├── addBook.jsp                  # Add new book
-├── searchBook.jsp               # Search books
+
+**Port 8080 already in use?**├── addBook.jsp                  # Add new book
+
+- Change `server.port=8081` in application.properties├── searchBook.jsp               # Search books
+
 ├── issueBook.jsp                # Issue book to student
-├── returnBook.jsp               # Return book from student
-├── addStudent.jsp               # Register student
-├── viewStudentInfo.jsp          # View student & borrowed books
+
+**Maven build fails?**├── returnBook.jsp               # Return book from student
+
+- Verify Java 17+: `java -version`├── addStudent.jsp               # Register student
+
+- Clean and rebuild: `mvn clean install`├── viewStudentInfo.jsp          # View student & borrowed books
+
 ├── setup_borrowed_books.sql     # Database setup script
-├── run_setup.bat                # Batch file to run SQL
-├── .gitignore                   # Excludes DatabaseConfig from git
-├── Readme.md                    # This file
+
+**Can't login?**├── run_setup.bat                # Batch file to run SQL
+
+- Check console for "Default admin user created" message├── .gitignore                   # Excludes DatabaseConfig from git
+
+- Try credentials: admin / password123├── Readme.md                    # This file
+
 └── WEB-INF/
-    ├── web.xml                  # Servlet mappings
-    └── classes/
-        ├── CheckLoginServlet.java         # Login handler
+
+**Database issues?**    ├── web.xml                  # Servlet mappings
+
+- Verify H2 console URL: `jdbc:h2:mem:librarydb`    └── classes/
+
+- Check application.properties for correct configuration        ├── CheckLoginServlet.java         # Login handler
+
         ├── CheckLoginServlet.class
-        ├── LogoutServlet.java             # Logout handler
+
+---        ├── LogoutServlet.java             # Logout handler
+
         ├── LogoutServlet.class
-        └── config/
+
+## 🎯 Business Rules        └── config/
+
             ├── DatabaseConfig.java         # DB credentials (git-ignored)
-            ├── DatabaseConfig.class
-            └── DatabaseConfig_TEMPLATE.java # Template for setup
-```
 
----
+- **Loan Period**: 14 days from issue date            ├── DatabaseConfig.class
 
-## 🔒 Security
+- **Fine**: ₹5 per day for overdue books            └── DatabaseConfig_TEMPLATE.java # Template for setup
 
-### Implemented Security Features
+- **Book Availability**: Books can only be issued if available quantity > 0```
 
-1. **Session-Based Authentication**
+- **Inventory**: Automatic tracking of available vs total quantities
 
-   - All pages check for valid session
-   - Redirect to login if unauthorized
-   - Logout invalidates session completely
+- **Session**: 30-minute timeout for inactive users---
 
-2. **Centralized Database Configuration**
 
-   - Credentials in separate `DatabaseConfig.java`
+
+---## 🔒 Security
+
+
+
+## 🤝 Contributing### Implemented Security Features
+
+
+
+Contributions are welcome! Please:1. **Session-Based Authentication**
+
+
+
+1. Fork the repository   - All pages check for valid session
+
+2. Create a feature branch (`git checkout -b feature/AmazingFeature`)   - Redirect to login if unauthorized
+
+3. Commit changes (`git commit -m 'Add AmazingFeature'`)   - Logout invalidates session completely
+
+4. Push to branch (`git push origin feature/AmazingFeature`)
+
+5. Open a Pull Request2. **Centralized Database Configuration**
+
+
+
+---   - Credentials in separate `DatabaseConfig.java`
+
    - No hardcoded passwords in JSP files
-   - Git-ignored to prevent credential exposure
 
-3. **SQL Injection Prevention**
+## 📄 License   - Git-ignored to prevent credential exposure
 
-   - All queries use `PreparedStatement`
+
+
+This project is licensed under the MIT License.3. **SQL Injection Prevention**
+
+
+
+---   - All queries use `PreparedStatement`
+
    - Parameter binding instead of string concatenation
-   - Input validation and sanitization
 
-4. **Input Validation**
-   - Trim and empty checks on all inputs
+## 👨‍💻 Author   - Input validation and sanitization
+
+
+
+**Umesh Gupta**4. **Input Validation**
+
+- GitHub: [@umeshgupta05](https://github.com/umeshgupta05)   - Trim and empty checks on all inputs
+
    - NumberFormatException handling
-   - Duplicate entry prevention
 
-### Files Using DatabaseConfig
+---   - Duplicate entry prevention
 
-- ✅ `addBook.jsp`
-- ✅ `addStudent.jsp`
+
+
+## 🙏 Acknowledgments### Files Using DatabaseConfig
+
+
+
+- Spring Boot team for the excellent framework- ✅ `addBook.jsp`
+
+- All contributors and testers- ✅ `addStudent.jsp`
+
 - ✅ `searchBook.jsp`
-- ✅ `viewStudentInfo.jsp`
+
+---- ✅ `viewStudentInfo.jsp`
+
 - ✅ `issueBook.jsp`
-- ✅ `returnBook.jsp`
 
-### .gitignore Configuration
+## 📞 Support- ✅ `returnBook.jsp`
 
-```
-WEB-INF/classes/config/DatabaseConfig.class
+
+
+Having issues? Please:### .gitignore Configuration
+
+1. Check existing [Issues](https://github.com/umeshgupta05/Library_Management_System/issues)
+
+2. Create a new issue with detailed information```
+
+3. Include error messages and logsWEB-INF/classes/config/DatabaseConfig.class
+
 WEB-INF/classes/config/DatabaseConfig.java
-*.class
+
+---*.class
+
 *.log
-```
 
----
+## 🔄 Version History```
 
-## 🧪 Testing
 
-### Test Scenarios
 
-**1. Login System**
+**v2.0.0** (Current - November 2025)---
 
-- Login with correct credentials (admin/password123)
-- Login with incorrect credentials
+- ✅ Migrated to Spring Boot 3.2.0
+
+- ✅ Added Spring Security## 🧪 Testing
+
+- ✅ Implemented Spring Data JPA
+
+- ✅ Added H2 database support### Test Scenarios
+
+- ✅ Modern JSP-based UI
+
+- ✅ Comprehensive error handling**1. Login System**
+
+
+
+**v1.0.0** (Legacy)- Login with correct credentials (admin/password123)
+
+- Traditional JSP/Servlet architecture- Login with incorrect credentials
+
 - Access protected pages without login
-- Logout and verify session cleared
 
-**2. Book Management**
+---- Logout and verify session cleared
 
-- Add new book
+
+
+## ⭐ Show Your Support**2. Book Management**
+
+
+
+If you find this project helpful, please give it a star on GitHub!- Add new book
+
 - Search by book name
-- Search by author name
+
+---- Search by author name
+
 - Add duplicate ISBN (should fail)
 
+**Made with ❤️ using Spring Boot**
+
 **3. Student Management**
+
+*Last Updated: November 19, 2025*
 
 - Register new student
 - View student information
@@ -358,45 +677,57 @@ WEB-INF/classes/config/DatabaseConfig.java
 
 **1. ClassNotFoundException: config.DatabaseConfig**
 
-```
+````
+
 Solution: Compile DatabaseConfig.java
 cd WEB-INF/classes
 javac config/DatabaseConfig.java
+
 ```
 
 **2. ORA-01017: Invalid username/password**
 
 ```
+
 Solution: Update credentials in DatabaseConfig.java
 Check: sqlplus system/password@localhost:1521/XE
+
 ```
 
 **3. HTTP 404 - Page Not Found**
 
 ```
+
 Solution: Verify Tomcat is running and URL is correct
 URL: http://localhost:8080/AdJava/
+
 ```
 
 **4. Session Lost / Not Logged In**
 
 ```
+
 Solution: Check session timeout in web.xml
 Clear browser cookies and login again
+
 ```
 
 **5. Book Not Issuing (4-Book Limit)**
 
 ```
+
 Solution: Student has 4 books already borrowed
 Return books first, then issue new ones
+
 ```
 
 **6. Oracle Database Not Running**
 
 ```
+
 Solution: net start OracleServiceXE
 Check: lsnrctl status
+
 ```
 
 ---
@@ -437,8 +768,8 @@ Check: lsnrctl status
 
 ---
 
-**Project Status:** ✅ Production Ready  
-**Security Level:** ✅ Credentials Secured  
+**Project Status:** ✅ Production Ready
+**Security Level:** ✅ Credentials Secured
 **Last Updated:** November 4, 2025
 ├── 📄 welcome.jsp # Dashboard
 ├── 📄 addBook.jsp # Add book form
@@ -456,7 +787,7 @@ Check: lsnrctl status
 ├── 📘 DOCUMENTATION.md # This file
 └── 📄 AdJava.iml # IntelliJ project file
 
-````
+```
 
 ### File Descriptions
 
@@ -577,7 +908,7 @@ Check: lsnrctl status
         <url-pattern>/SessionCookieServlet</url-pattern>
     </servlet-mapping>
 </web-app>
-````
+```
 
 ### JDBC Configuration (in JSP files)
 
